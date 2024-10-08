@@ -7,9 +7,9 @@ on:
   pull_request:
 
 permissions:
-  contents: write  # Allows modifying the repository contents
-  packages: write  # Allows publishing packages (if needed)
-  pages: write     # Allows publishing GitHub Pages (if needed)
+  contents: write
+  packages: write
+  pages: write
   
 jobs:
   build:
@@ -34,9 +34,12 @@ jobs:
         shell: pwsh
         run: |
           mkdir dist
-          cp Build/Zarina-Client-win32-x64/Zarina-Client.exe dist/
-          Compress-Archive -Path dist/* -DestinationPath dist/Zarina-Client-1.2.0-win.zip
-          certutil -hashfile dist/Zarina-Client-1.2.0-win.zip SHA256 | Out-File dist/Zarina-Client-1.2.0-win.zip.sha256
+          $VERSION = node -p "require('./package.json').version"
+          # Copy all contents from the Build folder to the dist folder
+          cp -Recurse Build/* dist/
+          # Create a zip file including everything in the dist folder
+          Compress-Archive -Path dist/* -DestinationPath dist/Zarina-Client-$VERSION-win.zip
+          certutil -hashfile dist/Zarina-Client-$VERSION-win.zip SHA256 | Out-File dist/Zarina-Client-$VERSION-win.zip.sha256
 
       - name: Create GitHub Release
         env:
@@ -44,4 +47,4 @@ jobs:
         shell: pwsh
         run: |
           $VERSION = node -p "require('./package.json').version"
-          gh release create "v$VERSION" dist/Zarina-Client-1.2.0-win.zip dist/Zarina-Client-1.2.0-win.zip.sha256 --title "Release $VERSION" --notes "Release version $VERSION"
+          gh release create "v$VERSION" dist/Zarina-Client-$VERSION-win.zip dist/Zarina-Client-$VERSION-win.zip.sha256 --title "Release $VERSION" --notes "Release version $VERSION"
