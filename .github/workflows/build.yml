@@ -7,9 +7,10 @@ on:
   pull_request:
 
 permissions:
-  contents: write
-  releases: write
-
+  contents: write  # Allows modifying the repository contents
+  packages: write  # Allows publishing packages (if needed)
+  pages: write     # Allows publishing GitHub Pages (if needed)
+  
 jobs:
   build:
     runs-on: windows-latest
