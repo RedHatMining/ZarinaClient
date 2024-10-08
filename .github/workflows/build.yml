@@ -1,0 +1,40 @@
+name: Build Electron App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the app
+        run: npm run build
+
+      - name: Create zip for Windows
+        run: |
+          mkdir dist
+          cp Build/Zarina-Client-win32-x64/Zarina-Client.exe dist/
+          zip -r dist/Zarina-Client-1.2.0-win.zip dist/*
+          certutil -hashfile dist/Zarina-Client-1.2.0-win.zip SHA256 > dist/Zarina-Client-1.2.0-win.zip.sha256
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          gh release create "v$VERSION" dist/Zarina-Client-1.2.0-win.zip dist/Zarina-Client-1.2.0-win.zip.sha256 --title "Release $VERSION" --notes "Release version $VERSION"
