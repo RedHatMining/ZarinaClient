@@ -29,7 +29,7 @@ jobs:
         run: |
           mkdir dist
           cp Build/Zarina-Client-win32-x64/Zarina-Client.exe dist/
-          zip -r dist/Zarina-Client-1.2.0-win.zip dist/*
+          Compress-Archive -Path dist/* -DestinationPath dist/Zarina-Client-1.2.0-win.zip
           certutil -hashfile dist/Zarina-Client-1.2.0-win.zip SHA256 > dist/Zarina-Client-1.2.0-win.zip.sha256
 
       - name: Create GitHub Release
