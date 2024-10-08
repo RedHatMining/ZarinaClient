@@ -26,15 +26,17 @@ jobs:
         run: npm run build
 
       - name: Create zip for Windows
+        shell: pwsh
         run: |
           mkdir dist
           cp Build/Zarina-Client-win32-x64/Zarina-Client.exe dist/
           Compress-Archive -Path dist/* -DestinationPath dist/Zarina-Client-1.2.0-win.zip
-          certutil -hashfile dist/Zarina-Client-1.2.0-win.zip SHA256 > dist/Zarina-Client-1.2.0-win.zip.sha256
+          certutil -hashfile dist/Zarina-Client-1.2.0-win.zip SHA256 | Out-File dist/Zarina-Client-1.2.0-win.zip.sha256
 
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
         run: |
-          VERSION=$(node -p "require('./package.json').version")
+          $VERSION = node -p "require('./package.json').version"
           gh release create "v$VERSION" dist/Zarina-Client-1.2.0-win.zip dist/Zarina-Client-1.2.0-win.zip.sha256 --title "Release $VERSION" --notes "Release version $VERSION"
