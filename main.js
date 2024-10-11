@@ -8,7 +8,7 @@ let mainWindow;
 const clientId = '1254292681878929460';
 const rpc = new Client({ transport: 'ipc' });
 
-const loadExtensionToTmp = async () => {
+const patch = async () => {
   const extensionPath = path.join(__dirname, 'EvPatch');
   const tempPath = path.join(os.tmpdir(), 'EvPatch');
 
@@ -75,7 +75,6 @@ const createWindow = () => {
   mainWindow.loadFile(path.join(__dirname, 'mainpage.html'));
 
   mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow.webContents.openDevTools();
     const currentUrl = mainWindow.webContents.getURL();
     if (currentUrl.includes('ev.io/user/login')) {
       mainWindow.setTitle('ZarinaClient - Login');
@@ -130,12 +129,12 @@ app.whenReady().then(() => {
         setPerformanceFlags('cpu');
       }
 
-      loadExtensionToTmp();
+      patch();
       createWindow();
     })
     .catch((err) => {
       console.error('Failed to detect GPU information:', err);
-      setPerformanceFlags('cpu');
+      patch('cpu');
       loadExtensionToTmp();
       createWindow();
     });
