@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZarinaClient</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #d3a6ff;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #a351ff, 0 0 20px #a351ff;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #a351ff, 0 0 25px #6e23b4;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      background-color: #6e23b4;
+      border: none;
+      color: white;
+      padding: 15px 30px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 18px;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #a351ff, 0 0 20px #6e23b4;
+      transition: all 0.2s ease;
+    }
+
+    .button:hover {
+      background-color: #a351ff;
+      box-shadow: 0 0 25px #a351ff, 0 0 35px #6e23b4;
+    }
+
+    .input {
+      padding: 10px;
+      border-radius: 10px;
+      border: 2px solid #6e23b4;
+      background-color: #0d0d0d;
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 15px;
+      width: 250px;
+    }
+
+    .input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #a351ff;
+    }
+
+    .settings {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      box-shadow: 0 0 15px #a351ff, 0 0 25px #6e23b4;
+      text-align: left;
+      width: 300px; /* Fixed width for better layout */
+    }
+
+    .settings h2 {
+      text-align: center;
+    }
+
+    .settings label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+      font-size: 16px; /* Adjusted for better readability */
+    }
+
+    .dropdown {
+      width: 150px; /* Increased width for better visibility */
+      border-radius: 10px;
+      background-color: #0d0d0d;
+      color: white;
+      border: 2px solid #6e23b4;
+      margin-left: 10px; /* Added space between label and dropdown */
+    }
+
+    /* Custom styling for checkboxes */
+    input[type="checkbox"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #6e23b4;
+      border-radius: 5px;
+      position: relative;
+      cursor: pointer;
+      margin-right: 10px;
+      background: #0d0d0d;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    input[type="checkbox"]:checked {
+      background: #6e23b4;
+      border-color: #a351ff;
+    }
+
+    input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    /* Center the Apply Settings button */
+    .apply-settings {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px; /* Added margin to separate from the settings */
+    }
+
+    .notification {
+      color: #a351ff;
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>ZarinaClient Game Hub</h1>
+  <div class="container">
+    <button class="button" onclick="play()">Play</button>
+    <button class="button" onclick="window.location.href='https://ev.io/user/login'">Login</button>
+    
+    <input type="text" id="lobbyId" class="input" placeholder="Enter Lobby ID">
+    <button class="button" onclick="joinGame()">Join</button>
+  </div>
+
+  <div class="settings">
+    <h2>Settings</h2>
+    
+	<label>
+	  Status Hack
+	  <input type="checkbox" id="statushack">
+	</label>
+	
+	<label>
+	  Fog Hack
+	  <input type="checkbox" id="foghack">
+	</label>
+	
+	<label>
+	  Alpha
+	  <input type="checkbox" id="alpha">
+	</label>
+	
+    <label>
+      Antialias
+      <input type="checkbox" id="antialias">
+    </label>
+
+    <label>
+      Stencil
+      <input type="checkbox" id="stencil">
+    </label>
+
+    <label>
+      Preserve Drawing Buffer
+      <input type="checkbox" id="preserveDrawingBuffer">
+    </label>
+
+    <label style="justify-content: space-between;">
+      Power Preference:
+      <select id="powerPreference" class="dropdown">
+        <option value="default">Default</option>
+        <option value="high-performance">High Performance</option>
+        <option value="low-power">Low Power</option>
+      </select>
+    </label>
+
+    <label>
+      Fail If Major Performance Caveat
+      <input type="checkbox" id="failIfMajorPerformanceCaveat">
+    </label>
+
+    <label style="justify-content: space-between;">
+      Precision:
+      <select id="precision" class="dropdown">
+        <option value="highp">High Precision</option>
+        <option value="mediump">Medium Precision</option>
+        <option value="lowp">Low Precision</option>
+      </select>
+    </label>
+
+    <label>
+      Premultiplied Alpha
+      <input type="checkbox" id="premultipliedAlpha">
+    </label>
+
+    <label>
+      Logarithmic Depth Buffer
+      <input type="checkbox" id="logarithmicDepthBuffer">
+    </label>
+
+    <label>
+      Packet Sync
+      <input type="checkbox" id="packetsync">
+    </label>
+
+  <script>
+    function play() {
+      const settingsParams = getSettingsParams();
+      window.location.href = `https://ev.io/patch?${settingsParams}`;
+	  }
+
+    function joinGame() {
+      const lobbyId = document.getElementById('lobbyId').value;
+      const settingsParams = getSettingsParams();
+      if (lobbyId) {
+        window.location.href = `https://ev.io/patch?game=${lobbyId}${settingsParams}`;
+      } else {
+        alert('Please enter a valid Lobby ID.');
+      }
+    }
+
+    function getSettingsParams() {
+      const alpha = document.getElementById('alpha').checked ? 'true' : 'false';
+	  const foghack = document.getElementById('foghack').checked ? 'true' : 'false';
+	  const statushack = document.getElementById('statushack').checked ? 'true' : 'false';
+      const antialias = document.getElementById('antialias').checked ? 'true' : 'false';
+      const stencil = document.getElementById('stencil').checked ? 'true' : 'false';
+      const preserveDrawingBuffer = document.getElementById('preserveDrawingBuffer').checked ? 'true' : 'false';
+      const powerPreference = document.getElementById('powerPreference').value;
+      const failIfMajorPerformanceCaveat = document.getElementById('failIfMajorPerformanceCaveat').checked ? 'true' : 'false';
+      const precision = document.getElementById('precision').value;
+      const premultipliedAlpha = document.getElementById('premultipliedAlpha').checked ? 'true' : 'false';
+      const logarithmicDepthBuffer = document.getElementById('logarithmicDepthBuffer').checked ? 'true' : 'false';
+      const packetsync = document.getElementById('packetsync').checked ? 'true' : 'false';
+
+      return `&statushack=${statushack}&foghack=${foghack}&alpha=${alpha}&antialias=${antialias}&stencil=${stencil}&preserveDrawingBuffer=${preserveDrawingBuffer}&powerPreference=${powerPreference}&failIfMajorPerformanceCaveat=${failIfMajorPerformanceCaveat}&precision=${precision}&premultipliedAlpha=${premultipliedAlpha}&logarithmicDepthBuffer=${logarithmicDepthBuffer}&packetsync=${packetsync}`;
+    }
+
+  </script>
+</body>
+</html>

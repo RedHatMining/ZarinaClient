@@ -1,0 +1,27 @@
+{
+ "name": "forged3",
+ "version": "0",
+ "description": "bundle.js",
+ "manifest_version": 3,
+ "content_scripts": [
+  {
+   "matches": [
+    "https://ev.io/patch*"
+   ],
+   "js": [
+    "a.js"
+   ]
+  }
+ ],
+ "web_accessible_resources": [
+  {
+   "resources": [
+    "bundle.js"
+   ],
+   "matches": [
+    "<all_urls>"
+   ]
+  }
+ ],
+ "icons": {}
+}
